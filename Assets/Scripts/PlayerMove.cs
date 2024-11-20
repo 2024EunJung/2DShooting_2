@@ -6,104 +6,69 @@ using UnityEngine.SceneManagement;
 public class PlayerMove : MonoBehaviour
 {
     public float speed;
+    public Rigidbody2D rb;
 
-    Transform tr;
-    Vector2 mousePosition;
+    public GameObject bulletPrefab; // ë°œì‚¬í•  ì´ì•Œ í”„ë¦¬íŒ¹
 
-    public Vector2 limitPoint1; //¿ŞÂÊÇÏ´Ü
-    public Vector2 limitPoint2; //¿À¸¥ÂÊ»ó´Ü
+    public int numBullets = 3;      // í•œ ë²ˆì— ë°œì‚¬í•  ì´ì•Œì˜ ê°œìˆ˜
+    public float angleSpread = 30f; // í¼ì§€ëŠ” ê°ë„
 
+    private Vector2 movement;
 
-    public GameObject bulletPrefab; // ¹ß»çÇÒ ÃÑ¾Ë ÇÁ¸®ÆÕ
-
-    public int numBullets = 3;      // ÇÑ ¹ø¿¡ ¹ß»çÇÒ ÃÑ¾ËÀÇ °³¼ö (ºÎÃ¤²Ã·Î 3¹ß)
-    public float angleSpread = 30f; // ºÎÃ¤²Ã °¢µµ ¹üÀ§ (ÁÂ¿ì °¢µµ Â÷ÀÌ)
-
-    // Start is called before the first frame update
     void Start()
     {
-        tr = GetComponent<Transform>();
         StartCoroutine(FireBullet());
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //Ä«¸Ş¶ó°¡ ºñÃß°íÀÖ´Â È­¸é³»ÀÇ ÁÂÇ¥°ªÀ» »ç¿ëÇÒ ¼ö ÀÖ°Ô ÇØÁÜ
+        // ì…ë ¥ ë°›ê¸°
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
 
-            if(mousePosition.x < limitPoint1.x)
-            {
-                mousePosition = new Vector2(limitPoint1.x, mousePosition.y);
-            }
-            if (mousePosition.y < limitPoint1.y)
-            {
-                mousePosition = new Vector2(mousePosition.x, limitPoint1.y);
-            }
-            if (mousePosition.x > limitPoint2.x)
-            {
-                mousePosition = new Vector2(limitPoint2.x, mousePosition.y);
-            }
-            if (mousePosition.y > limitPoint2.y)
-            {
-                mousePosition = new Vector2(mousePosition.x, limitPoint2.y);
-            }
-
-            tr.position = Vector2.MoveTowards(tr.position, mousePosition, Time.deltaTime * speed);
-        }
+        movement = new Vector2(moveX, moveY).normalized; // ë°©í–¥ ë²¡í„° ì •ê·œí™”
     }
-    void OnDrawGizmos()
+
+    void FixedUpdate()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(limitPoint1, new Vector2(limitPoint2.x, limitPoint1.y));
-        Gizmos.DrawLine(limitPoint1, new Vector2(limitPoint1.x, limitPoint2.y));
-        Gizmos.DrawLine(new Vector2(limitPoint1.x, limitPoint2.y), limitPoint2);
-        Gizmos.DrawLine(new Vector2(limitPoint2.x, limitPoint1.y), limitPoint2);
-
+        // ë¦¬ì§€ë“œë°”ë””ì˜ velocityë¡œ ì›€ì§ì„ ì²˜ë¦¬
+        rb.velocity = movement * speed;
     }
-    IEnumerator FireBullet() // ÄÚ·çÆ¾ ÇÔ¼ö·Î ÀÏÁ¤ ½Ã°£µ¿¾È ´ë±â
+
+    IEnumerator FireBullet() // ì´ì•Œ ë°œì‚¬
     {
         while (true)
         {
             if (numBullets == 1)
             {
-                // ÇÏ³ªÀÇ ÃÑ¾ËÀº ±×³É Á¤Áß¾ÓÀ¸·Î ¹ß»ç
+                // í•œ ë°œë§Œ ë°œì‚¬
                 GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse); // À§ÂÊ ¹æÇâÀ¸·Î ¹ß»ç
+                rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse); // ìœ„ìª½ìœ¼ë¡œ ë°œì‚¬
             }
             else
             {
-                float angleStep = angleSpread / (numBullets - 1); // °¢ ¹ß»ç ÃÑ¾Ë °£ÀÇ °¢µµ Â÷ÀÌ
+                float angleStep = angleSpread / (numBullets - 1); // ê°ë„ ê°„ê²© ê³„ì‚°
 
                 for (int i = 0; i < numBullets; i++)
                 {
-                    // °¢µµ¸¦ °è»êÇÏ¿© ÃÑ¾Ë ¹ß»ç ¹æÇâÀ» ¼³Á¤
-                    float angle = -angleSpread / 2 + i * angleStep; // ºÎÃ¤²Ã ¹üÀ§ ³»¿¡¼­ °¢µµ °è»ê
+                    // ê°ë„ ê³„ì‚°
+                    float angle = -angleSpread / 2 + i * angleStep;
 
-                    // ÃÑ¾ËÀ» ¹ß»çÇÒ ¹æÇâÀ» °è»ê (È¸Àü Àû¿ë)
+                    // íšŒì „ ìƒì„±
                     Quaternion bulletRotation = Quaternion.Euler(0, 0, angle);
 
-                    // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¿¡¼­ ÃÑ¾ËÀ» ¹ß»ç
+                    // ì´ì•Œ ìƒì„±
                     GameObject bullet = Instantiate(bulletPrefab, transform.position, bulletRotation);
 
-                    // ÃÑ¾ËÀÇ Rigidbody2D¿¡ ÈûÀ» Ãß°¡ÇÏ¿© ¹ß»ç
+                    // ë°œì‚¬
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                    rb.AddForce(bulletRotation * Vector2.up * 5f, ForceMode2D.Impulse); // À§ÂÊ ¹æÇâÀ¸·Î ¹ß»ç
+                    rb.AddForce(bulletRotation * Vector2.up * 5f, ForceMode2D.Impulse);
                 }
             }
-            
-            yield return new WaitForSeconds(0.1f); // 0.3ÃÊ¸¶´Ù ³»¿ë ¹İº¹
-        }
-    }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("EnemyBullet"))
-        {
-            SceneManager.LoadScene("GameOver");
+            yield return new WaitForSeconds(0.1f); // 0.1ì´ˆ ê°„ê²©ìœ¼ë¡œ ë°œì‚¬
         }
     }
 }
