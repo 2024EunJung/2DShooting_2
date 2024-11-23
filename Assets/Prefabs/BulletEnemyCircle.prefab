@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8398244357676240711
+--- !u!1 &8568191087530809164
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 342472347690214093}
-  - component: {fileID: 3860052910445124329}
-  - component: {fileID: 3183153736350884983}
-  - component: {fileID: 8814428882721904054}
+  - component: {fileID: 5196263113715532278}
+  - component: {fileID: 7531704543753395275}
+  - component: {fileID: 1549664885002895927}
+  - component: {fileID: 6401587890941194896}
+  - component: {fileID: -5352825836882374071}
   m_Layer: 0
-  m_Name: Player
-  m_TagString: Player
+  m_Name: BulletEnemyCircle
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &342472347690214093
+--- !u!4 &5196263113715532278
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398244357676240711}
+  m_GameObject: {fileID: 8568191087530809164}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.38, y: 4.47, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalPosition: {x: -1.15, y: 2.5, z: 0}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3860052910445124329
+--- !u!212 &7531704543753395275
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398244357676240711}
+  m_GameObject: {fileID: 8568191087530809164}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d57b7d8a4a98c9b4893c7ed882b18cbf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58892ad4678589549a8102db62c11fb2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -86,31 +87,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3183153736350884983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398244357676240711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 447bb43ddeb19c64cbe2efc8af01b124, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 4
-  limitPoint1: {x: -2.42, y: -4.57}
-  limitPoint2: {x: 2.38, y: 4.47}
-  bulletPrefab: {fileID: 5775483939838437086, guid: 0af884b3525976a4c95822a061895421, type: 3}
-  numBullets: 1
-  angleSpread: 10
---- !u!58 &8814428882721904054
+--- !u!58 &1549664885002895927
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398244357676240711}
+  m_GameObject: {fileID: 8568191087530809164}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -136,6 +119,53 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.031738378, y: 0}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.15
+--- !u!50 &6401587890941194896
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8568191087530809164}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &-5352825836882374071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8568191087530809164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e757df5a01ec68845926328bdaa80a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  bulletPrefab: {fileID: 5775483939838437086, guid: 692d6b136326bfe4da6442ac0c8c6b8d, type: 3}
+  fireRate: 0.2
+  player: {fileID: 0}
+  health: 5
+  easeTime: 1
+  originalSprite: {fileID: 0}
+  flashSprite: {fileID: 21300000, guid: 12369a9c614a17345b88956ab18f16f5, type: 3}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyCreate : MonoBehaviour
 {
-    public GameObject prefabEnemy;
+    public GameObject[] prefabEnemy;
     public Vector2 limitMin;
     public Vector2 limitMax;
 
@@ -28,9 +28,9 @@ public class EnemyCreate : MonoBehaviour
             // 첫 번쨰 인자와 두 번째 인자 사이에서 랜덤한 값을 돌려주는 함수
             Vector2 creatingPoint = new Vector2(r, limitMin.y);
 
-            Instantiate(prefabEnemy, creatingPoint, Quaternion.identity );
+            Instantiate(prefabEnemy[Random.Range(0, prefabEnemy.Length)], creatingPoint, Quaternion.identity );
 
-            float creatingTime = Random.Range(0.5f, 3.0f);
+            float creatingTime = Random.Range(0.5f, 1.0f);
             yield return new WaitForSeconds(creatingTime);
         }
     }
