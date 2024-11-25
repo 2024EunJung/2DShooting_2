@@ -168,3 +168,10 @@ MonoBehaviour:
   health: 3
   originalSprite: {fileID: 0}
   flashSprite: {fileID: 21300000, guid: 12369a9c614a17345b88956ab18f16f5, type: 3}
+  Item:
+  - {fileID: 7832401965849273963, guid: 06c2a38fef0b9414f8453d7f2b00ea9d, type: 3}
+  - {fileID: 7832401965849273963, guid: ce910871d58340f4aa087866dfbb6e5b, type: 3}
+  - {fileID: 7832401965849273963, guid: ce910871d58340f4aa087866dfbb6e5b, type: 3}
+  - {fileID: 7832401965849273963, guid: ce910871d58340f4aa087866dfbb6e5b, type: 3}
+  - {fileID: 7832401965849273963, guid: ce910871d58340f4aa087866dfbb6e5b, type: 3}
+  - {fileID: 7832401965849273963, guid: ce910871d58340f4aa087866dfbb6e5b, type: 3}

@@ -15,7 +15,7 @@ public class BulletEnemyFan : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Sprite originalSprite;   // ���� ��������Ʈ ����
     public Sprite flashSprite;      // �Ͼ�� ������ �� ����� ��������Ʈ
-
+    public GameObject[] Item;
     void Start()
     {
         tr = GetComponent<Transform>();
@@ -64,9 +64,8 @@ public class BulletEnemyFan : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("PlayerBullet")) // �÷��̾��� �Ѿ˿� ������
+        if (collision.gameObject.CompareTag("PlayerBullet")) 
         {
-            // ü�� ����
             health--;
 
             // �Ͼ�� �����̴� ȿ��
@@ -75,6 +74,10 @@ public class BulletEnemyFan : MonoBehaviour
             if (health <= 0) // ü���� 0�� �Ǹ� �� �ı�
             {
                 GameManager.Instance.AddScore(10);
+                GameManager.Instance.AddXp(50);
+                int randomValue = Random.Range(0, Item.Length);
+                Instantiate(Item[randomValue], transform.position, Quaternion.identity);
+
                 Destroy(gameObject); // �� �ı�
             }
 

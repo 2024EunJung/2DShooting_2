@@ -14,6 +14,7 @@ public class PlayerMove : MonoBehaviour
     public float angleSpread = 30f; // 퍼지는 각도
 
     private Vector2 movement;
+    public Transform firePoint;
 
     void Start()
     {
@@ -43,7 +44,7 @@ public class PlayerMove : MonoBehaviour
             if (numBullets == 1)
             {
                 // 한 발만 발사
-                GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse); // 위쪽으로 발사
             }
@@ -60,7 +61,7 @@ public class PlayerMove : MonoBehaviour
                     Quaternion bulletRotation = Quaternion.Euler(0, 0, angle);
 
                     // 총알 생성
-                    GameObject bullet = Instantiate(bulletPrefab, transform.position, bulletRotation);
+                    GameObject bullet = Instantiate(bulletPrefab, firePoint.position, bulletRotation);
 
                     // 발사
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

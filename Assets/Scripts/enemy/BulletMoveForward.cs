@@ -20,4 +20,13 @@ public class BulletMoveForward : MonoBehaviour
         direction = dir;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision != null && collision.CompareTag("Player"))
+        {
+            GameManager.Instance.TakeDamage(1);
+            Debug.Log("1");
+        }
+    }
+
 }

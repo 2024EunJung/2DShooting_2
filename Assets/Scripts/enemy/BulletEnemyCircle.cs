@@ -17,7 +17,7 @@ public class BulletEnemyCircle : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Sprite originalSprite;   // ���� ��������Ʈ ����
     public Sprite flashSprite;      // �Ͼ�� ������ �� ����� ��������Ʈ
-
+    public GameObject[] Item;
     private float angleOffset = 0f; // ������ ȸ����Ű�� ���� ����
 
     void Start()
@@ -99,6 +99,10 @@ public class BulletEnemyCircle : MonoBehaviour
             if (health <= 0) // ü���� 0�� �Ǹ� �� �ı�
             {
                 GameManager.Instance.AddScore(10);
+                GameManager.Instance.AddXp(50);
+                int randomValue = Random.Range(0, Item.Length);
+                Instantiate(Item[randomValue], transform.position, Quaternion.identity);
+
                 Destroy(gameObject); // �� �ı�
             }
 

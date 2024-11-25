@@ -30,8 +30,7 @@ public class EnemyCreate : MonoBehaviour
 
             Instantiate(prefabEnemy[Random.Range(0, prefabEnemy.Length)], creatingPoint, Quaternion.identity );
 
-            float creatingTime = Random.Range(0.5f, 1.0f);
-            yield return new WaitForSeconds(creatingTime);
+            yield return new WaitForSeconds(1f/GameManager.Instance.level);
         }
     }
 
