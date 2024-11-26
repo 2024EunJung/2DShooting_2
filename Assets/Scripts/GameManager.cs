@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     public Image powerBar;
 
     public GameObject player;
+    public GameObject boss;
+
+    public EnemyCreate Creater;
 
     public Transform cameraTransform; // 카메라 Transform
     private Vector3 originalCameraPosition; // 카메라의 원래 위치
@@ -113,6 +116,16 @@ public class GameManager : MonoBehaviour
 
         // Update HP bar color
         UpdateHpBarColor();
+
+        if(score >= 5000)
+        {
+            BossStart();
+        }
+    }
+
+    public void BossStart()
+    {
+        Creater.StopCreatingEnemies();
     }
 
     private void FixedUpdate()
