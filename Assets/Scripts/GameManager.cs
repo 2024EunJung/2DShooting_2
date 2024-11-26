@@ -17,15 +17,20 @@ public class GameManager : MonoBehaviour
     public int score;       // Score 변수
     public int power = 1;
     public int maxPower;
+    public int bossHp;
+    public int maxBossHp;
 
-    
+
     public TMP_Text scoreTxt;
     public TMP_Text hp_Text;
     public TMP_Text xp_Text;
     public TMP_Text level_Text;
+    public TMP_Text bossHp_Text;
+    public TMP_Text maxScoreTxt;
     public Image hpBar;
     public Image xpBar;
     public Image powerBar;
+    public Image bossBar;
 
     public GameObject player;
     public GameObject boss;
@@ -34,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     public Transform cameraTransform; // 카메라 Transform
     private Vector3 originalCameraPosition; // 카메라의 원래 위치
+
+    public AudioSource audioSource; // 소리를 재생할 AudioSource
+    public AudioClip[] audioClips;  // 오디오 클립 배열
 
     private void Awake()
     {
@@ -53,10 +61,20 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void PlaySound(int clipIndex)
+    {
+        if (audioClips != null && clipIndex >= 0 && clipIndex < audioClips.Length)
+        {
+            audioSource.clip = audioClips[clipIndex];
+            audioSource.Play();
+        }
+    }
+
     // 카메라 흔들림 함수
     public void CameraShake(float duration, float magnitude)
     {
         StartCoroutine(Shake(duration, magnitude));
+        PlaySound(0);
     }
 
     private IEnumerator Shake(float duration, float magnitude)
@@ -96,7 +114,12 @@ public class GameManager : MonoBehaviour
         hp = maxHp;
         xp = 0;
         originalCameraPosition = cameraTransform.localPosition;
+
+        // 최고 점수 로드 및 텍스트 초기화
+        int maxScore = PlayerPrefs.GetInt("MaxScore", 0);
+        maxScoreTxt.text = "Max Score\n" + maxScore.ToString("D10");
     }
+
 
     private void Update()
     {
@@ -105,11 +128,13 @@ public class GameManager : MonoBehaviour
         hp_Text.text = $"{hp}";
         xp_Text.text = $"{xp}/{maxXp}";
         level_Text.text = $"{level}";
+        bossHp_Text.text = $"{bossHp}/{maxBossHp}";
 
         // Update fill amounts
         hpBar.fillAmount = (float)hp / maxHp;
         xpBar.fillAmount = (float)xp / maxXp;
         powerBar.fillAmount = (float)power / maxPower;
+        bossBar.fillAmount = (float)bossHp / maxBossHp;
 
         PlayerMove pl = player.GetComponent<PlayerMove>();
         pl.numBullets = power;
@@ -117,15 +142,45 @@ public class GameManager : MonoBehaviour
         // Update HP bar color
         UpdateHpBarColor();
 
-        if(score >= 5000)
+        // 보스 등장 조건
+        if (score >= 5000)
         {
             BossStart();
         }
+
+        // 실시간 최고 점수 갱신
+        if (score > PlayerPrefs.GetInt("MaxScore", 0))
+        {
+            PlayerPrefs.SetInt("MaxScore", score);
+            maxScoreTxt.text = "Max Score\n" + score.ToString("D10");
+        }
+
+        // 보스 체력이 0 이하가 되면
+        if (bossHp <= 0 && boss.activeSelf) // 보스가 활성화된 상태에서만 실행
+        {
+            BossDefeated();
+        }
     }
+
+
+    private void BossDefeated()
+    {
+        // 보스 체력 0 상태에서 실행되는 메서드
+        boss.SetActive(false); // 보스를 비활성화
+        Creater.StopCreatingEnemies(); // 적 생성 중단
+
+        // 현재 점수 저장
+        PlayerPrefs.SetInt("FinalScore", score);
+
+        // 다음 씬 로드
+        SceneManager.LoadScene(2);
+    }
+
 
     public void BossStart()
     {
-        Creater.StopCreatingEnemies();
+        boss.SetActive(true);
+        PlaySound(5);
     }
 
     private void FixedUpdate()
@@ -138,15 +193,17 @@ public class GameManager : MonoBehaviour
     public void AddScore(int points)
     {
         score += points;
+        PlaySound(1);
     }
 
     public void AddPower(int points)
     {
         power += points;
-        if(power >= maxPower)
+        if (power >= maxPower)
         {
             power = maxPower;
         }
+        PlaySound(2);
     }
 
     // XP를 추가하는 메서드
@@ -169,15 +226,16 @@ public class GameManager : MonoBehaviour
         maxXp += 500; // 다음 레벨업에 필요한 XP 증가
 
         // 체력 회복 등 레벨업 보상 (선택 사항)
-        maxHp += 10; 
+        maxHp += 2;
         hp = maxHp;
+        PlaySound(3);
     }
 
     // HP를 감소시키는 메서드
     public void TakeDamage(int damage)
     {
         hp -= damage;
-        CameraShake(0.1f, (float)damage/2);
+        CameraShake(0.1f, (float)damage / 2);
         if (hp <= 0)
         {
             hp = 0;
@@ -211,6 +269,7 @@ public class GameManager : MonoBehaviour
     // 게임 오버 처리
     private void GameOver()
     {
+        Creater.StopCreatingEnemies();
         SceneManager.LoadScene(1);
     }
 }

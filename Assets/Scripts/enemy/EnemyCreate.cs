@@ -24,7 +24,7 @@ public class EnemyCreate : MonoBehaviour
 
             Instantiate(prefabEnemy[Random.Range(0, prefabEnemy.Length)], creatingPoint, Quaternion.identity);
 
-            yield return new WaitForSeconds(1f / GameManager.Instance.level);
+            yield return new WaitForSeconds(.5f / GameManager.Instance.level);
         }
     }
 
@@ -42,6 +42,7 @@ public class EnemyCreate : MonoBehaviour
         if (Create == null)
         {
             Create = StartCoroutine(CreateEnemy());
+
         }
     }
 

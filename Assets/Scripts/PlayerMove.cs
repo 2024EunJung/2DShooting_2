@@ -15,12 +15,24 @@ public class PlayerMove : MonoBehaviour
 
     private Vector2 movement;
     public Transform firePoint;
+    public AudioSource audioSource; // 총 발사 소리를 재생할 AudioSource
+    public AudioClip fireSound;     // 총 발사 소리
+
 
     void Start()
     {
         StartCoroutine(FireBullet());
         rb = gameObject.GetComponent<Rigidbody2D>();
     }
+
+    private void PlayFireSound()
+    {
+        if (audioSource != null && fireSound != null)
+        {
+            audioSource.PlayOneShot(fireSound);
+        }
+    }
+
 
     void Update()
     {
@@ -47,6 +59,8 @@ public class PlayerMove : MonoBehaviour
                 GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse); // 위쪽으로 발사
+
+                PlayFireSound();
             }
             else
             {
@@ -67,6 +81,7 @@ public class PlayerMove : MonoBehaviour
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                     rb.AddForce(bulletRotation * Vector2.up * 5f, ForceMode2D.Impulse);
                 }
+                PlayFireSound();
             }
 
             yield return new WaitForSeconds(0.1f); // 0.1초 간격으로 발사
